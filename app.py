@@ -4,6 +4,7 @@ from models import Usuario, db
 from config import Config
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.exc import IntegrityError
 
 app = Flask(__name__)
 
@@ -78,21 +79,19 @@ def register():
             flash("Campos vacios", 'danger')
             return redirect('/register')
 
-        # creamos un nuevo usuario
-        # si el usuario ya existe
         # generar hash_password
         hash = generate_password_hash(password)
-        usuario_existente = Usuario.query.filter_by(username=username, correo=correo).first()
-
-        if usuario_existente:
-            flash("Ese usuario ya existe", 'warning ')
-            return redirect('/')
-        
-        # si el usuario es nuevo
-        usuario_nuevo = Usuario(username=username, correo=correo, password_hash=hash)
-
-        db.session.add(usuario_nuevo)
-        db.session.commit()
+        # creamos un nuevo usuario
+        try:
+            # si el usuario es nuevo
+            usuario_nuevo = Usuario(username=username, correo=correo, password_hash=hash)
+            db.session.add(usuario_nuevo)
+            db.session.commit()
+        except IntegrityError as e:
+            # si el usuario ya existe
+            db.session.rollback()
+            flash("El usuario ya existe, verifique de nuevo",'warning' )
+            return redirect('/register')
 
         flash('Usuario registrado', 'success')
         return redirect('/')
