@@ -1,0 +1,23 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Inicio
+{% endblock %}
+
+{% block content %}
+    <h1>Este es el index</h1>
+    <h2>Tu nombre es: {{ nombre }}</h2>
+    <h3>Tu edad es: {{ edad }}</h3>
+
+    {% if precio <= 0 %}
+        <p>El precio es invalido</p>
+    {% else %}
+        <p>El precio es correcto</p>
+    {% endif %}
+
+    <ul>
+        {% for empleado in empleados %}
+            <li>{{ empleado.nombre }} || {{ empleado.departamento }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}
