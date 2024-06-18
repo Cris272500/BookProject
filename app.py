@@ -123,6 +123,7 @@ def login():
             return redirect("/login")
         
         # si el usuario no existe
+        # el que esta a la izquierda del igual es el campo de mi modelo Usuario
         usuario = Usuario.query.filter_by(correo=email).first()
 
         if usuario is None:
@@ -146,5 +147,6 @@ def logout():
     logout_user()
     flash("Has cerrado sesion", "primary")
     return redirect("/")
+
 if __name__ == '__main__':
     app.run(debug=True) 
