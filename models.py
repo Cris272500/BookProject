@@ -13,3 +13,20 @@ class Usuario(db.Model):
     # funcion para imprimir un registro de este modelo
     def __repr__(self):
         return f"Username: {self.username}"
+    
+
+    # metodos de flask-login
+    @property
+    def is_authenticated(self):
+        return True 
+    
+    @property
+    def is_active(self):
+        return True 
+    
+    @property
+    def is_anonymous(self):
+        return False
+    
+    def get_id(self):
+        return str(self.id)
