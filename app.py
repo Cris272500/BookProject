@@ -31,49 +31,11 @@ login_manager.init_app(app)
 def load_user(user_id):
     return Usuario.query.get(int(user_id))
 
-empleados = [
-    {
-        "id": 1,
-        "nombre": "Juan Pérez",
-        "edad": 28,
-        "departamento": "Ventas",
-        "salario": 35000,
-        "fecha_contratacion": "2019-04-21"
-    },
-    {
-        "id": 2,
-        "nombre": "María López",
-        "edad": 34,
-        "departamento": "Marketing",
-        "salario": 42000,
-        "fecha_contratacion": "2018-07-14"
-    },
-    {
-        "id": 3,
-        "nombre": "Carlos Sánchez",
-        "edad": 45,
-        "departamento": "Finanzas",
-        "salario": 58000,
-        "fecha_contratacion": "2012-01-12"
-    },
-    {
-        "id": 4,
-        "nombre": "Ana Torres",
-        "edad": 30,
-        "departamento": "Recursos Humanos",
-        "salario": 39000,
-        "fecha_contratacion": "2020-09-01"
-    },
-]
 
 @app.route('/')
 @login_required
 def index():
-    nombre = "David"
-    edad = 20
-    precio = 100
-
-    return render_template('index.html', nombre=nombre, edad=edad, precio=precio, empleados=empleados)
+    return render_template('index.html')
 @app.route('/repaso/<nombre>')
 def repaso(nombre):
     return f"Hola {nombre}"

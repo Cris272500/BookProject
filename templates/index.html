@@ -4,20 +4,24 @@
     Inicio
 {% endblock %}
 
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
 {% block content %}
-    <h1>Este es el index</h1>
-    <h2>Tu nombre es: {{ nombre }}</h2>
-    <h3>Tu edad es: {{ edad }}</h3>
+    <h1 id="test">Este es el index</h1>
 
-    {% if precio <= 0 %}
-        <p>El precio es invalido</p>
-    {% else %}
-        <p>El precio es correcto</p>
-    {% endif %}
+    <button type="button" class="btn btn-primary" id="login">Iniciar sesion</button>
+    <button type="button" class="btn btn-primary" id="register">Registrarse</button>
+    
+    <img src="{{ url_for('static', filename='js.png') }}" alt="Logo">
 
-    <ul>
-        {% for empleado in empleados %}
-            <li>{{ empleado.nombre }} || {{ empleado.departamento }}</li>
-        {% endfor %}
-    </ul>
+    <div class="cotainer-content" id="contenedor">
+
+    </div>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
 {% endblock %}
