@@ -1,0 +1,27 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Categorias
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    
+    <h1>Crear categorias</h1>
+    <form method="post" action="/categoria">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Nombre</label>
+          <input type="text" name="nombre" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Crear</button>
+      </form>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+{% endblock %}

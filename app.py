@@ -1,6 +1,6 @@
 from flask import Flask, request, render_template, redirect, flash
 # importar nuestros modelos
-from models import Usuario, db
+from models import Usuario, db, Autor, Categoria,categorias_libro, Libro
 from config import Config
 from flask_session import Session
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -39,6 +39,89 @@ def index():
 @app.route('/repaso/<nombre>')
 def repaso(nombre):
     return f"Hola {nombre}"
+
+
+@app.route('/autor', methods=['POST', 'GET'])
+@login_required
+def autor():
+    if request.method == "POST":
+        nombre = request.form.get("nombre")
+        bio = request.form.get("biografia")
+
+        # validaciones
+        if not nombre or not bio:
+            flash("Campos vacios", "danger")
+            return redirect("/autor")
+        
+        try:
+            # crear un autor
+            nuevo_autor = Autor(nombre=nombre, biografia=bio)
+            db.session.add(nuevo_autor)
+            db.session.commit()
+        except:
+            db.session.rollback()
+            flash("Ocurrio un algun error", "danger")
+            return redirect("/autor")
+        
+        flash("Autor creado", "success")
+        return redirect("/")
+    else:
+        return render_template("autor.html")
+
+# CREAR, AGREGAR LIBROS
+@app.route("/crear", methods=['GET', 'POST'])
+def crear_libro():
+    # si es metodo post
+    if request.method == "POST":
+        # obtener los inputs
+        titulo = request.form.get("titulo")
+        descripcion = request.form.get("descripcion")
+        fecha = request.form.get("fecha")
+        autor = request.form.get("autor")
+        categorias = request.form.getlist("categoria")
+
+        # TODO: crear un objeto de Tipo Libro y guardarlo a la base de datos
+
+        print(f"{titulo, descripcion, fecha, autor}")
+        print(f"Cat: {categorias}")
+
+        return redirect("/crear")
+
+    else:
+        # categorias
+        categorias = Categoria.query.all()
+        # autores
+        autores = Autor.query.all()
+
+        '''print(f"{categorias}")
+        print(f"{autores}")'''
+
+        return render_template("crear_libro.html", categorias=categorias, autores=autores)
+
+@app.route("/categoria", methods=['GET', 'POST'])
+@login_required
+def categoria():
+    if request.method == "POST":
+        nombre = request.form.get("nombre")
+
+        # si esta vacio
+        if not nombre:
+            flash("Campo vacio", "danger")
+            return redirect("/categoria")
+        
+        try:
+            nueva_categoria = Categoria(nombre=nombre)
+            db.session.add(nueva_categoria)
+            db.session.commit()
+        except:
+            db.session.rollback() # DETIENE, CORTA LA EJECUCION DE LA BASE DE DATOS
+            flash("Hubo un error", "danger")
+            return redirect("/categoria")
+        
+        flash("Categoria creada", "success")
+        return redirect("/")
+    else:
+        return render_template("categorias.html")
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():

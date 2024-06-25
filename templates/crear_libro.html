@@ -1,0 +1,67 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    Crear libro
+{% endblock %}
+
+{% block style %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block content %}
+    
+    <h1>Crear libro</h1>
+    <form method="post" action="/crear">
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Titulo</label>
+          <input type="text" name="titulo" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Descripcion</label>
+            <textarea name="descripcion" id="exampleInputPassword1" class="form-control"></textarea>
+        </div>
+        
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Fecha publicacion</label>
+            <input type="date" name="fecha" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+        </div>
+
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Autor</label>
+            <!--Sera un input de busqueda, escribira el nombre del autor y si no lo encuentra
+            mostrara autor no encontrado, de lo contario encontrara el autor
+            <input type="text" name="autor" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+            -->
+            
+            <select name="autor" class="form-control">
+                <option value=""> ---Seleccione al autor---</option>
+                {% for autor in autores %}
+                    <option value="{{ autor.id }}"> {{ autor.nombre }} </option>
+                {% endfor %}
+            </select>
+        </div>
+
+
+        <div class="mb-3">
+            <label for="exampleInputEmail1" class="form-label">Categorias</label>
+
+            {% for categoria in categorias %}
+                <div class="form-check">
+                    <label class="form-check-label" for="flexCheckChecked">
+                        {{ categoria.nombre }}
+                    </label>
+                    <input  name="categoria" class="form-check-input" type="checkbox" value="{{ categoria.id }}" id="flexCheckChecked">
+                </div>
+            
+                {% endfor %}
+        </div>
+        
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+
+{% endblock %}
+
+{% block script %}
+    <script src="{{ url_for('static', filename='index.js') }}"></script>
+{% endblock %}
