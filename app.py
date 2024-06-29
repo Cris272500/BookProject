@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, redirect, flash
+from flask import Flask, request, render_template, redirect, flash, jsonify
 # importar nuestros modelos
 from models import Usuario, db, Autor, Categoria,categorias_libro, Libro
 from config import Config
@@ -7,6 +7,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.exc import IntegrityError
 # importar modulo para que el usuario haga login
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
+# capturas las diferentes solicitudes: POST, GET, PUT, DELETE
+import requests
 
 app = Flask(__name__)
 
@@ -192,6 +194,20 @@ def logout():
     logout_user()
     flash("Has cerrado sesion", "primary")
     return redirect("/")
+
+# con esta ruta hacemos la busqueda de un libro, y me muestra los titulos coincidentes
+@app.route("/api", methods=['POST'])
+def get_api():
+    query = request.json.get('query')
+    # url que hace la busqueda de libros que coinciden con el titulo
+    api_url = f"https://www.googleapis.com/books/v1/volumes/?q={query}"
+    # esta variable se encarga de obtener la respuesta (OK, ERROR)
+    response = requests.get(api_url)
+    # recibimos la informacion
+    data = response.json()
+
+    print(f"Estado: {response}")
+    return jsonify(data)
 
 if __name__ == '__main__':
     app.run(debug=True) 
